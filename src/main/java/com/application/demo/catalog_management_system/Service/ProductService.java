@@ -50,8 +50,8 @@ public class ProductService {
         return product;
     }
 
-    public void updateProduct(int productId, Product product) throws Exception{
-        logger.info("UpdateProduct method has been called");
+    public void updateProductById(int productId, Product product) throws Exception{
+        logger.info("UpdateProductById method has been called");
         Product getProduct = productRepository.findById(productId).orElse(null);
         getProduct.setBrand(product.getBrand());
         getProduct.setName(product.getName());
@@ -62,7 +62,28 @@ public class ProductService {
         getProduct.setCreatedOn(getProduct.getCreatedOn());
         getProduct.setUpdatedOn(new Date());
         productRepository.save(getProduct);
-        logger.info("UpdateProduct method has been ended");
+        logger.info("UpdateProductById method has been ended");
+    }
+
+    public String updateProductByName(String name, Product product) throws Exception{
+        Product getProduct = productRepository.findByName(name);
+
+        if(product == null){
+            throw new RuntimeException(String.format("Not Available ",name));
+        }
+        logger.info("UpdateProductByName method has been called");
+        getProduct.setBrand(product.getBrand());
+        getProduct.setName(product.getName());
+        getProduct.setCategory(product.getCategory());
+        getProduct.setPrice(product.getPrice());
+        getProduct.setQuantity(product.getQuantity());
+        getProduct.setDescription(product.getDescription());
+        getProduct.setCreatedOn(getProduct.getCreatedOn());
+        getProduct.setUpdatedOn(new Date());
+        productRepository.save(getProduct);
+        logger.info("UpdateProductByName method has been ended");
+        return "Details updated successfully";
+
     }
 
     public void deleteProduct(Integer productId){

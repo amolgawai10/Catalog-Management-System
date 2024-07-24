@@ -85,12 +85,12 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateCategory(@RequestParam Integer productId,
+    @PutMapping("/updateById")
+    public ResponseEntity<?> updateProductById(@RequestParam Integer productId,
                                                    @RequestBody Product product) throws Exception{
         logger.info("update API has started");
         try{
-            productService.updateProduct(productId, product);
+            productService.updateProductById(productId, product);
             Product p = productRepository.findById(productId).orElse(null);
             logger.info("update API has ended");
             return new ResponseEntity<>(p, HttpStatus.OK);
@@ -98,6 +98,22 @@ public class ProductController {
         catch(Exception e){
             String msg = "Invalid Entry";
             logger.error("Update API has failed due to error :"+e.getMessage());
+            return new ResponseEntity<>(msg,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateByName")
+    public ResponseEntity<?> updateProductByName(@RequestParam String name, @RequestBody Product product){
+
+        logger.info("updateProductByName API has started");
+        try{
+            String res = productService.updateProductByName(name,product);
+            logger.info("updateProductByName API has ended");
+            return new ResponseEntity<>(res,HttpStatus.OK);
+        }
+        catch(Exception e){
+            String msg = "can't update the product";
+            logger.error("updateProductByName API has failed due to error :"+e.getMessage());
             return new ResponseEntity<>(msg,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -115,6 +131,7 @@ public class ProductController {
         logger.info("Delete API has ended");
         return new ResponseEntity<>("Product is deleted Successfully", HttpStatus.OK);
 
-
     }
+
+
 }
